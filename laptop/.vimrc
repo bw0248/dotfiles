@@ -1,0 +1,144 @@
+" Use Vim settings, rather than Vi settings (much better!).
+" This must be first, because it changes other options as a side effect.
+set nocompatible
+
+execute pathogen#infect()
+
+call plug#begin('~/.vim/plugged')
+"Plug 'KeitaNakamura/neodark.vim'
+call plug#end()
+
+syntax enable
+filetype plugin indent on
+"set background=dark
+set number 			" show line numbers
+set relativenumber
+set autoindent			" auto indentation
+set softtabstop=4
+set expandtab			" uses spaces instead of tabs
+set smarttab			" use tabs at the start of a line, spaces elsewhere
+set shiftwidth=2		" number of spaces for autoindent
+set showmatch			" show matching parenthesis
+set title			" change the terminal title
+set t_Co=256
+set incsearch                   " search on keystroke
+set hlsearch                    " highlight all hits
+
+"############## Spellcheck ################
+" TODO: Create spellfile, so german words can be added to the german
+" dictionary
+
+au BufNewFile,BufRead,BufEnter      *.wiki     setlocal spell      spelllang=en_us,de_de,en_gb
+au BufNewFile,BufRead,BufEnter      *.md       setlocal spell      spelllang=en_us,de_de,en_gb
+au BufNewFile,BufRead,BufEnter      *.txt      setlocal spell      spelllang=en_us,de_de,en_gb
+
+"############### Themes ###################
+
+""""""""""""""" Airline """""""""""""""""
+let g:airline_powerline_fonts = 1
+let g:airline_theme='solarized'
+"let g:airline_theme='gruvbox'
+"let g:airline_theme='tomorrow'
+
+"don't show the ugly orange triangle at the end in case there are no warnings
+let g:airline_skip_empty_sections = 1
+
+if !exists('g:airline_symbols')
+  let g:airline_symbols = {}
+endif
+
+
+" unicode symbols
+let g:airline_left_sep = '»'
+let g:airline_left_sep = '▶'
+let g:airline_right_sep = '«'
+let g:airline_right_sep = '◀'
+let g:airline_symbols.linenr = '␊'
+let g:airline_symbols.linenr = '␤'
+let g:airline_symbols.linenr = '¶'
+let g:airline_symbols.branch = '⎇'
+let g:airline_symbols.paste = 'ρ'
+let g:airline_symbols.paste = 'Þ'
+let g:airline_symbols.paste = '∥'
+let g:airline_symbols.whitespace = 'Ξ'
+
+" airline symbols
+let g:airline_left_sep = ''
+let g:airline_left_alt_sep = ''
+let g:airline_right_sep = ''
+let g:airline_right_alt_sep = ''
+let g:airline_symbols.branch = ''
+let g:airline_symbols.readonly = ''
+let g:airline_symbols.linenr = ''
+
+
+""""""""""""""" Tomorrow """""""""""""""""
+"colorscheme Tomorrow-Night-Bright
+"
+""""""""""""" gruvbox """""""""""""""""""""""
+"set background=dark
+""let g:gruvbox_contrast_dark='hard'      "needs to be set before loading the colorscheme
+"colorscheme gruvbox
+"
+"let g:gruvbox_italic=1
+
+
+""""""""""""""" solarized """"""""""""""""
+set background=dark
+"let g:solarized_termcolors=256  " only use this if you don't use solarized
+"colors in Xresources
+colorscheme solarized
+
+""""""""""""""" neodark """"""""""""""""""
+"colorscheme neodark
+"let g:neodark#background = '#000000'
+"let g:neodark#use_256color = 1
+
+""""""""""""""" hybrid theme """""""""""""
+
+"default palette for hybrid theme
+"let g:hybrid_custom_term_colors = 1
+
+"colorscheme hybrid
+
+
+"reduce contrast palette for hybrid theme
+"let g:hybrid_reduced_contrast = 1 " Remove this line if using the default palette.
+
+
+"""""""""""""" jellybeans """""""""""""""""
+
+"colorscheme jellybeans
+
+
+"############## Custom Mappings ##############
+
+" Don't use Ex mode, use Q for formatting
+map Q gq
+
+"############## Syntax Highlighting ##############
+
+""""""""""""""" C++ """"""""""""""""""""
+" source: https://github.com/octol/vim-cpp-enhanced-highlight
+
+let c_no_curly_error=1                    "workaround for vim flagging braces as errors
+
+
+"############## Vimwiki #######################
+
+let g:vimwiki_list = [
+      \{'path': '~/Documents/private/Vimwiki/personal.wiki'},
+      \{'path': '~/Documents/private/Vimwiki/studies.wiki'},
+      \{'path': '~/Documents/private/Vimwiki/projects.wiki'},
+      \{'path': '~/Documents/private/Vimwiki/technical.wiki'}
+      \]
+
+""""""""""" Insert Journal Template """"""""""""""
+
+nnoremap <silent><leader>tj :call NewJournal()<CR>
+
+function! NewJournal()
+  .-1read ~/.vim/templates/journal
+  s/Date/\=strftime("%A, %d. %B %Y")/
+endfunction
+

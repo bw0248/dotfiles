@@ -1,0 +1,24 @@
+#!/bin/bash
+
+running=0
+status=$(playerctl --player=spotify status)
+if [[ $status == 'Playing' ]]; then
+  status=
+  running=1
+elif [[ $status == 'Paused' ]]; then
+  status=
+  running=1
+fi
+artist=$(playerctl --player=spotify metadata artist)
+song=$(playerctl --player=spotify metadata title) 
+
+if [[ $running -eq 1 ]]; then
+  if [[ $artist == '' ]]; then
+      pactl set-sink-mute @DEFAULT_SINK@ 1
+  else 
+      pactl set-sink-mute @DEFAULT_SINK@ 0
+  fi
+fi  
+
+
+echo -n "$status  " "$artist" - "$song" 
