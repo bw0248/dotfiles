@@ -1,0 +1,7 @@
+#
+# ~/.profile
+#
+
+export QT_STYLE_OVERRIDE=gtk2
+PATH=$PATH:$HOME/bin
+
