@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+if [[ $1 == "vim" ]]; then
+  feh ~/Documents/cheatsheets/vim.jpg &
+elif [[ $1 == "kb" ]]; then
+  feh ~/Documents/cheatsheets/qwertz.png &
+elif [[ $1 == "term" ]]; then
+  feh ~/Documents/cheatsheets/term.png &
+fi
+
+sleep 0.1s
+
+i3-msg floating enable
+i3-msg border pixel 1
+
