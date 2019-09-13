@@ -1,0 +1,36 @@
+#!/bin/bash
+
+# underline color for polybar
+underline_color=#0a6cf5 
+
+running=0
+status=$(playerctl --player=spotify status 2>/dev/null)
+if [[ $status == 'Playing' ]]; then
+  underline_color=#00FF00
+  status=
+  running=1
+elif [[ $status == 'Paused' ]]; then
+  underline_color=#FFFF00
+  status=
+  running=1
+elif [[ $status == "No players found" ]]; then
+  running=0
+fi
+artist=$(playerctl --player=spotify metadata artist 2>/dev/null)
+song=$(playerctl --player=spotify metadata title 2>/dev/null) 
+
+out_string="$status  $artist - $song"
+
+if [[ $running -eq 1 ]]; then
+  if [[ $artist == '' ]]; then
+      underline_color=#FF0000
+      out_string="$status  blocking ad"
+      pactl set-sink-mute @DEFAULT_SINK@ 1
+  else 
+      pactl set-sink-mute @DEFAULT_SINK@ 0
+  fi
+  echo -n "%{u$underline_color +u}" "$out_string""%{-u}" 
+else 
+  echo -n "-"
+fi  
+

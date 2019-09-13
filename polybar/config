@@ -1,0 +1,314 @@
+;==========================================================
+;
+;
+;   ██████╗  ██████╗ ██╗  ██╗   ██╗██████╗  █████╗ ██████╗
+;   ██╔══██╗██╔═══██╗██║  ╚██╗ ██╔╝██╔══██╗██╔══██╗██╔══██╗
+;   ██████╔╝██║   ██║██║   ╚████╔╝ ██████╔╝███████║██████╔╝
+;   ██╔═══╝ ██║   ██║██║    ╚██╔╝  ██╔══██╗██╔══██║██╔══██╗
+;   ██║     ╚██████╔╝███████╗██║   ██████╔╝██║  ██║██║  ██║
+;   ╚═╝      ╚═════╝ ╚══════╝╚═╝   ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝
+;
+;
+;   To learn more about how to configure Polybar
+;   go to https://github.com/polybar/polybar
+;
+;   The README contains a lot of information
+;
+;==========================================================
+
+[colors]
+;background = ${xrdb:color0:#222}
+background = #222
+background-alt = #444
+;foreground = ${xrdb:color7:#222}
+foreground = #dfdfdf
+foreground-alt = #555
+primary = #ffb52a
+secondary = #e60053
+alert = #bd2c40
+
+[bar/mybar]
+monitor = ${env:Monitor:}
+bottom = true
+width = 100%
+height = 27
+radius = 0
+fixed-center = false
+
+; to play nice with i3
+override-redirect = true
+wm-restack = i3
+
+background = ${colors.background}
+foreground = ${colors.foreground}
+
+line-size = 3
+line-color = #f00
+;line-color = #0a6cf5
+
+; set borders around bar
+border-size = 0
+border-color = #00000000
+
+padding-left = 0
+padding-right = 1
+
+module-margin-left = 1
+module-margin-right = 1
+
+# fonts
+; Note: picking fonts inside a module is 1-based => *-font = 1 will use font-0
+; find fonts with fc-list
+;font-0 = Noto Sans Mono:style=Regular:fontformat=truetype:size=8;1
+;font-0 = Anonymous Pro:style=Regular:fontformat=truetype:size=9
+font-0 = Anonymous Pro:style=Bold:fontformat=truetype:antialias=false:size=10
+;font-1 = unifont:fontformat=truetype:size=8:antialias=false;0
+font-1 = Font Awesome:fontformat=truetype:size=10
+
+modules-left = i3
+#modules_center = mpd
+modules-right = playerctl pulseaudio memory filesystem wireless-network openconnect cpu battery date
+
+tray-position = right
+tray-padding = 2
+
+[module/battery]
+type = internal/battery
+
+; ls -1 /sys/class/power_supply to figure out bat and adapter
+battery = BAT0
+adapter = ADP1
+;adapter = AC
+
+; set this to a lower value if battery never reports that it's full
+full-at = 96 
+time-format = %H:%M
+
+; Available tags:
+;   <label-charging> (default)
+;   <bar-capacity>
+;   <ramp-capacity>
+;   <animation-charging>
+;format-charging = <animation-charging><label-charging>
+format-charging = <label-charging>
+format-charging-underline = #00F0F0
+
+; Available tags:
+;   <label-discharging> (default)
+;   <bar-capacity>
+;   <ramp-capacity>
+;   <animation-discharging>
+format-discharging = <label-discharging>
+format-discharging-underline = #FFFF00
+
+; Available tags:
+;   <label-full> (default)
+;   <bar-capacity>
+;   <ramp-capacity>
+format-full = <label-full> 
+format-full-underline = #00FF00
+
+; Available tokens:
+;   %percentage% (default) - is set to 100 if full-at is reached
+;   %percentage_raw%
+;   %time%
+;   %consumption% (shows current charge rate in watts)
+;label-charging =   %percentage%% (%time%)
+
+; Heart labels
+label-charging =  %percentage%% (%time%)
+label-discharging =  %percentage%% (%time%)
+label-full =  %percentage%%
+
+; Available tokens:
+;   %percentage% (default) - is set to 100 if full-at is reached
+;   %percentage_raw%
+;   %time%
+;   %consumption% (shows current discharge rate in watts)
+;label-discharging = Discharging %percentage%%
+
+; Available tokens:
+;   %percentage% (default) - is set to 100 if full-at is reached
+;   %percentage_raw%
+;label-full =  %percentage%%
+
+; Only applies if <ramp-capacity> is used
+ramp-capacity-0 = 
+ramp-capacity-1 = 
+ramp-capacity-2 = 
+ramp-capacity-3 = 
+ramp-capacity-4 = 
+
+; Only applies if <bar-capacity> is used
+bar-capacity-width = 10
+
+; Only applies if <animation-charging> is used
+animation-charging-0 = 
+animation-charging-1 = 
+animation-charging-2 = 
+animation-charging-3 = 
+animation-charging-4 = 
+; Framerate in milliseconds
+animation-charging-framerate = 750
+
+; Only applies if <animation-discharging> is used
+animation-discharging-0 = 
+animation-discharging-1 = 
+animation-discharging-2 = 
+animation-discharging-3 = 
+animation-discharging-4 = 
+; Framerate in milliseconds
+animation-discharging-framerate = 500
+
+
+[module/i3]
+type = internal/i3
+format = <label-state> <label-mode>
+index-sort = true
+wrapping-scroll = false
+enable-scroll = false
+
+; Only show workspaces on the same output as the bar
+pin-workspaces = true
+
+label-mode-padding = 1
+label-mode-foreground = #000
+label-mode-background = ${colors.primary}
+
+; focused = Active workspace on focused monitor
+label-focused = %name%
+label-focused-background = ${colors.background-alt}
+label-focused-underline= ${colors.primary}
+label-focused-padding = 1
+
+; unfocused = Inactive workspace on any monitor
+label-unfocused = %name%
+label-unfocused-padding = 1
+
+; visible = Active workspace on unfocused monitor
+label-visible = %name%
+label-visible-background = ${self.label-focused-background}
+label-visible-underline = ${self.label-focused-underline}
+label-visible-padding = ${self.label-focused-padding}
+
+; urgent = Workspace with urgency hint set
+label-urgent = %index%
+label-urgent-background = ${colors.alert}
+label-urgent-padding = 1
+
+; Separator in between workspaces
+label-separator = |
+
+; workspace labels (need to match name of i3 workspace)
+
+[module/cpu]
+type = internal/cpu
+format = <label>
+label =  %percentage:2%%
+format-underline = #0a6cf5
+
+[module/date]
+type = internal/date
+interval = 5
+
+date = "%a %B %d, %Y"
+date-alt = " %Y-%m-%d"
+
+time = %H:%M
+time-alt = %H:%M:%S
+
+format-prefix = 
+format-prefix-foreground = ${colors.foreground-alt}
+format-underline = #0a6cf5
+
+label = %date% | %time%
+
+[module/wired-network]
+type = internal/network
+interface = enp0s31f6
+
+[module/wireless-network]
+type = internal/network
+interface = wlp2s0
+
+format-connected = <label-connected>
+format-connected-underline = #0a6cf5
+label-connected =  %essid% (%signal%%) |  %downspeed%  %upspeed% 
+
+format-disconnected =
+;format-disconnected = <label-disconnected>
+;format-disconnected-underline = ${self.format-connected-underline}
+;label-disconnected = %ifname% disconnected
+;label-disconnected-foreground = ${colors.foreground-alt}
+
+ramp-signal-0 = 
+ramp-signal-1 = 
+ramp-signal-2 = 
+ramp-signal-3 = 
+ramp-signal-4 = 
+ramp-signal-foreground = ${colors.foreground-alt}
+
+[module/filesystem]
+type=internal/fs
+mount-0 = /
+fixed-values = false
+
+format-mounted = <label-mounted>
+format-unmounted = <label-unmounted>
+
+label-mounted =  %free%
+format-mounted-underline = #0a6cf5
+
+[module/memory]
+type = internal/memory
+
+format = <label>
+#label =  %gb_used%/%gb_total% (%percentage_used%%) |  %gb_swap_used%/%gb_swap_total% (%percentage_swap_used%%) 
+label =  %percentage_used%% |  %percentage_swap_used%% 
+format-underline = #0a6cf5
+
+;[module/alsa]
+;type = internal/alsa
+;
+;format-volume = <label-volume>
+;format-muted = <label-muted>
+;
+;label-volume =  %percentage%%
+;label-muted =  %percentage%%
+
+[module/pulseaudio]
+type = internal/pulseaudio
+
+use-ui-max = true
+
+format-volume = <label-volume>
+format-muted = <label-muted>
+
+label-volume =  %percentage%%
+label-muted =  0%
+
+format-volume-underline = #0a6cf5
+format-muted-underline = #FF0000
+
+[module/playerctl]
+type = custom/script
+exec-if = playerctl --player=spotify status
+exec = ~/.config/polybar/scripts/playerctl
+format-underline = #0a6cf5
+
+[module/openconnect]
+type = custom/script
+exec-if = pgrep openconnect
+exec = echo "vpn active"
+format-underline = #FF0000
+
+[module/test]
+type = custom/script
+exec = .config/polybar/scripts/test_script
+
+[settings]
+screenchange-reload = true
+
+[global/wm]
+
+margin-top = 0
