@@ -1,0 +1,7 @@
+configuration {
+  modi: "window,run,ssh,drun";
+  combi-modi: "window,run,ssh,drun";
+  show-icons: true;
+  icon-theme: "Papirus";
+  theme: "/usr/share/rofi/themes/Arc-Dark.rasi";
+}
