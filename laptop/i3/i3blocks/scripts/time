@@ -1,7 +1,0 @@
-#!/bin/bash
-
-#set date format to english 
-LC_TIME=en_US
-
-#print date
-date '+%a %B %d, %Y | %H:%M'
