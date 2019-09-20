@@ -37,7 +37,8 @@ exec_always --no-startup-id xrandr --output $SEC_MON --auto --output $MAIN_MON -
 # xrandr --output eDP-1 --mode 1920x1080 --primary --right-of DP-2 --output DP-2 --mode 1024x768
 
 ## Wallpaper
-exec_always --no-startup-id feh --bg-scale ~/Pictures/wallpapers/earth.jpg
+#exec_always --no-startup-id feh --bg-scale ~/Pictures/wallpapers/earth.jpg
+exec_always --no-startup-id feh --bg-scale ~/dotfiles/wallpapers/sea.jpg
 
 exec --no-startup-id redshift-gtk
 
@@ -195,20 +196,19 @@ set $ws4 "4:"
 set $ws5 "5:"
 set $ws6 "6:"
 set $ws7 "7:"
-set $ws8 "8:"
+set $ws8 "8:"
 set $ws9 "9:"
 set $ws10 "10:"
-set $ws11 "11:"
-set $ws12 "12:"
-set $ws13 "13:"
-set $ws14 "14:"
-set $ws15 "15:"
-set $ws16 "16:"
-set $ws17 "17:"
-set $ws18 "18:"
-set $ws19 "19:"
-set $ws20 "20:"
-
+set $ws11 "11:"
+set $ws12 "12:"
+set $ws13 "13:"
+set $ws14 "14:"
+set $ws15 "15:"
+set $ws16 "16:"
+set $ws17 "17:"
+set $ws18 "18:"
+set $ws19 "19:"
+set $ws20 "20:"
 
 #set monitors for workspaces
 workspace $ws1  output $MAIN_MON 
@@ -259,7 +259,7 @@ for_window [class="code-oss"] border pixel 1
 assign [class="Kodi"] $ws5
 for_window [class="Kodi"] focus   #focus workspace after openening
 
-assign [class="jetbrains-idea"] $ws7
+for_window [class="jetbrains-idea"] border pixel 1
 
 # java programs
 for_window [class="Main"] floating enable
