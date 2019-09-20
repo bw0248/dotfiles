@@ -3,11 +3,11 @@
 echo $1
 
 #laptop display is always connected
-conn_mon_1="eDP-1"
+conn_mon_1="eDP1"
 conf_changed=false
 
 # get the other available output
-read conn_mon_2 <<< $(xrandr | grep '\Wconnected' | grep -v "eDP-1" | awk '{print $1}')
+read conn_mon_2 <<< $(xrandr | grep '\Wconnected' | grep -v "eDP1" | awk '{print $1}')
 
 #echo $conn_mon_1 
 #echo $conn_mon_2 
