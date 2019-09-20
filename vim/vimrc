@@ -2,11 +2,14 @@
 " This must be first, because it changes other options as a side effect.
 set nocompatible
 
-execute pathogen#infect()
-
+" vim-plug plugin manager (install plugins with :PlugInstall)
 call plug#begin('~/.vim/plugged')
 "Plug 'KeitaNakamura/neodark.vim'
 Plug 'lervag/vimtex'
+"Plug 'vim-airline/vim-airline'
+"Plug 'vim-airline/vim-airline-themes'
+Plug 'itchyny/lightline.vim'
+Plug 'sheerun/vim-polyglot'
 call plug#end()
 
 syntax enable
@@ -33,45 +36,19 @@ au BufNewFile,BufRead,BufEnter      *.wiki     setlocal spell      spelllang=en_
 au BufNewFile,BufRead,BufEnter      *.md       setlocal spell      spelllang=en_us,de_de,en_gb
 au BufNewFile,BufRead,BufEnter      *.txt      setlocal spell      spelllang=en_us,de_de,en_gb
 
+"############## Statusline ###############
+
+set laststatus=2
+
+" get rid of additional "-- INSERT --" field below statusline
+set noshowmode
+
+" set lightline theme
+let g:lightline = {
+      \ 'colorscheme': 'wombat',
+      \ }
+
 "############### Themes ###################
-
-""""""""""""""" Airline """""""""""""""""
-let g:airline_powerline_fonts = 1
-let g:airline_theme='solarized'
-"let g:airline_theme='gruvbox'
-"let g:airline_theme='tomorrow'
-
-"don't show the ugly orange triangle at the end in case there are no warnings
-let g:airline_skip_empty_sections = 1
-
-if !exists('g:airline_symbols')
-  let g:airline_symbols = {}
-endif
-
-
-" unicode symbols
-let g:airline_left_sep = '»'
-let g:airline_left_sep = '▶'
-let g:airline_right_sep = '«'
-let g:airline_right_sep = '◀'
-let g:airline_symbols.linenr = '␊'
-let g:airline_symbols.linenr = '␤'
-let g:airline_symbols.linenr = '¶'
-let g:airline_symbols.branch = '⎇'
-let g:airline_symbols.paste = 'ρ'
-let g:airline_symbols.paste = 'Þ'
-let g:airline_symbols.paste = '∥'
-let g:airline_symbols.whitespace = 'Ξ'
-
-" airline symbols
-let g:airline_left_sep = ''
-let g:airline_left_alt_sep = ''
-let g:airline_right_sep = ''
-let g:airline_right_alt_sep = ''
-let g:airline_symbols.branch = ''
-let g:airline_symbols.readonly = ''
-let g:airline_symbols.linenr = ''
-
 
 """"""""""""""" Tomorrow """""""""""""""""
 "colorscheme Tomorrow-Night-Bright
