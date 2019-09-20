@@ -1,11 +1,21 @@
 #!/usr/bin/env bash
 
+path=~/Documents/cheatsheets/
+
+if [ -d $path ]; then
+  path=~/dotfiles/cheatsheets/
+fi
+
 if [[ $1 == "vim" ]]; then
-  feh ~/Documents/cheatsheets/vim.jpg &
+  feh $path/vim.jpg &
 elif [[ $1 == "kb" ]]; then
-  feh ~/Documents/cheatsheets/qwertz.png &
+  feh $path/qwertz.png &
 elif [[ $1 == "term" ]]; then
-  feh ~/Documents/cheatsheets/term.png &
+  feh $path/term.png &
+elif [[ $1 == "regex" ]]; then
+  feh $path/regex.png &
+elif [[ $1 == "sed" ]]; then
+  feh $path/sed.png &
 fi
 
 sleep 0.1s
