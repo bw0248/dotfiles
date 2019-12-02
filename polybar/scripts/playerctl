@@ -3,8 +3,16 @@
 # underline color for polybar
 underline_color=#0a6cf5 
 
+# determine running player
+status=$(playerctl --player=spotify status 2>/dev/null) 
+if [[ -z $status ]]; then
+  status=$(playerctl --player=cmus status) 
+  player='cmus'
+else
+  player='spotify'
+fi
+
 running=0
-status=$(playerctl --player=spotify status 2>/dev/null)
 if [[ $status == 'Playing' ]]; then
   underline_color=#00FF00
   status=
@@ -13,16 +21,15 @@ elif [[ $status == 'Paused' ]]; then
   underline_color=#FFFF00
   status=
   running=1
-elif [[ $status == "No players found" ]]; then
-  running=0
 fi
-artist=$(playerctl --player=spotify metadata artist 2>/dev/null)
-song=$(playerctl --player=spotify metadata title 2>/dev/null) 
+
+artist=$(playerctl --player=$player metadata artist 2>/dev/null)
+song=$(playerctl --player=$player metadata title 2>/dev/null) 
 
 out_string="$status  $artist - $song"
 
 if [[ $running -eq 1 ]]; then
-  if [[ $artist == '' ]]; then
+  if [[ $artist == '' && $player == 'spotify' ]]; then
       underline_color=#FF0000
       out_string="$status  blocking ad"
       pactl set-sink-mute @DEFAULT_SINK@ 1
