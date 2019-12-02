@@ -1,24 +1,44 @@
 #!/bin/bash
 
+#TODO: make lappy = $MAIN_MON for laptop only use
+
 echo $1
+
+# xrandr commands for i3 config
+i3_prefix='exec_always --no-startup-id xrandr'
+xrandr_lappy='--output $SEC_MON --mode 1920x1080'
+xrandr_main='--output $MAIN_MON --mode 1920x1200 --primary --left-of $SEC_MON'
+xrandr_tv='--output $THIRD_MON --mode 1920x1080 --right-of $SEC_MON'
+
+# disable everything except for laptop display
+xrandr_disable_main='--output HDMI2 --off'
+xrandr_disable_tv='--output DP1 --off'
 
 #laptop display is always connected
 conn_mon_1="eDP1"
+xrandr_cmd="${i3_prefix} ${xrandr_lappy}"
 conf_changed=false
 
-# get the other available output
-read conn_mon_2 <<< $(xrandr | grep '\Wconnected' | grep -v "eDP1" | awk '{print $1}')
+# get hdmi output
+#read conn_mon_2 <<< $(xrandr | grep '\Wconnected' | grep -v "eDP1" | awk '{print $1}')
+read conn_mon_2 <<< $(xrandr | grep '\Wconnected' | grep "HDMI" | awk '{print $1}')
+
+# get dp output
+read conn_mon_3 <<< $(xrandr | grep '\Wconnected' | grep "^DP" | awk '{print $1}')
 
 #echo $conn_mon_1 
 #echo $conn_mon_2 
 
 main_mon=""
 sec_mon=""
+third_mon=""
 
 if [ "$1" = "home" ]; then
   #echo $1
   main_mon=$conn_mon_2
   sec_mon=$conn_mon_1
+  third_mon=$conn_mon_1 # tv not connected so use laptop display instead
+  xrandr_cmd="${xrandr_cmd} ${xrandr_main} ${xrandr_disable_tv}" 
   conf_changed=true
 elif [ "$1" = "pres" ]; then
   #echo $1
@@ -26,16 +46,32 @@ elif [ "$1" = "pres" ]; then
   sec_mon=$conn_mon_2
   conf_changed=true
 elif [ "$1" = "laptop" ]; then
-  xrandr --auto
+  main_mon=$conn_mon_1
+  sec_mon=$conn_mon_1
+  third_mon=$conn_mon_1
+  xrandr_cmd="${xrandr_cmd} ${xrandr_disable_main} ${xrandr_disable_tv}"
+  conf_changed=true
+elif [ "$1" = "tv" ]; then
+  main_mon=$conn_mon_2
+  sec_mon=$conn_mon_1
+  third_mon=$conn_mon_3 
+  xrandr_cmd="${xrandr_cmd} ${xrandr_main} ${xrandr_tv}" 
+  conf_changed=true
 fi
 
-#echo $main_mon
-#echo $sec_mon
+echo $main_mon
+echo $sec_mon
+echo $third_mon
+echo $xrandr_cmd
 
 if $conf_changed ; then
   # change outputs in i3wm config
   sed -i "s/set \$MAIN_MON .*/set \$MAIN_MON $main_mon/" "/home/bw/.config/i3/config"
   sed -i "s/set \$SEC_MON .*/set \$SEC_MON $sec_mon/" "/home/bw/.config/i3/config"
+  sed -i "s/set \$THIRD_MON .*/set \$THIRD_MON $third_mon/" "/home/bw/.config/i3/config"
+
+  # change xrandr command in i3 config
+  sed -i "s/^exec_always --no-startup-id xrandr .*/$xrandr_cmd/" "/home/bw/.config/i3/config"
 
   # restart i3 (in place)
   i3-msg restart
