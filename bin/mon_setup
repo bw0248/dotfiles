@@ -11,12 +11,14 @@ xrandr_main='--output $MAIN_MON --mode 1920x1200 --primary --left-of $SEC_MON'
 xrandr_tv='--output $THIRD_MON --mode 1920x1080 --right-of $SEC_MON'
 
 # disable everything except for laptop display
+xrandr_lappy_only='--output $MAIN_MON --mode 1920x1080'
 xrandr_disable_main='--output HDMI2 --off'
 xrandr_disable_tv='--output DP1 --off'
 
 #laptop display is always connected
 conn_mon_1="eDP1"
-xrandr_cmd="${i3_prefix} ${xrandr_lappy}"
+
+xrandr_cmd="${i3_prefix}"
 conf_changed=false
 
 # get hdmi output
@@ -38,7 +40,7 @@ if [ "$1" = "home" ]; then
   main_mon=$conn_mon_2
   sec_mon=$conn_mon_1
   third_mon=$conn_mon_1 # tv not connected so use laptop display instead
-  xrandr_cmd="${xrandr_cmd} ${xrandr_main} ${xrandr_disable_tv}" 
+  xrandr_cmd="${xrandr_cmd} ${xrandr_lappy} ${xrandr_main} ${xrandr_disable_tv}" 
   conf_changed=true
 elif [ "$1" = "pres" ]; then
   #echo $1
@@ -46,16 +48,19 @@ elif [ "$1" = "pres" ]; then
   sec_mon=$conn_mon_2
   conf_changed=true
 elif [ "$1" = "laptop" ]; then
-  main_mon=$conn_mon_1
-  sec_mon=$conn_mon_1
-  third_mon=$conn_mon_1
-  xrandr_cmd="${xrandr_cmd} ${xrandr_disable_main} ${xrandr_disable_tv}"
-  conf_changed=true
+  #workaround as there is weird stuff happening
+  xrandr --auto
+  conf_changed=false
+  #main_mon=$conn_mon_1
+  #sec_mon=$conn_mon_1
+  #third_mon=$conn_mon_1
+  #xrandr_cmd="${xrandr_cmd} ${xrandr_lappy_only} ${xrandr_disable_main} ${xrandr_disable_tv}"
+  #conf_changed=true
 elif [ "$1" = "tv" ]; then
   main_mon=$conn_mon_2
   sec_mon=$conn_mon_1
   third_mon=$conn_mon_3 
-  xrandr_cmd="${xrandr_cmd} ${xrandr_main} ${xrandr_tv}" 
+  xrandr_cmd="${xrandr_cmd} ${xrandr_lappy} ${xrandr_main} ${xrandr_tv}" 
   conf_changed=true
 fi
 

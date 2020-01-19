@@ -4,14 +4,16 @@ echo $1
 
 
 if [ $1 == "laptop" ]; then
-  pactl set-card-profile 0 output:analog-stereo
+  pactl set-card-profile 0 output:analog-stereo # TODO: check if this is actually needed
   pacmd set-default-sink alsa_output.pci-0000_00_1f.3.analog-stereo
 elif [ $1 == "hdmi" ]; then
-  pactl set-card-profile 0 output:hdmi-stereo
+  pactl set-card-profile 0 output:hdmi-stereo # TODO: check if this is actually needed
   pacmd set-default-sink alsa_output.pci-0000_00_1f.3.hdmi-stereo
 elif [ $1 == "speakers" ]; then
-  pactl set-card-profile 1 output:analog-stereo 
+  pactl set-card-profile 1 output:analog-stereo # TODO: check if this is actually needed
   pacmd set-default-sink alsa_output.usb-Logitech_Logitech_Z-5_Speakers-00.analog-stereo
+elif [ $1 == "bt-hp" ]; then
+  pacmd set-default-sink bluez_sink.4C_87_5D_81_11_93.a2dp_sink
 else
   echo "option not recognized, exiting"
   exit 1
