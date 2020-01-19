@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-zathura ~/Documents/ba/latex_thesis/thesis.pdf &
+zathura ~/Documents/uni/ba/latex_thesis/thesis.pdf &
 
 if [[ $1 == "vim" ]]; then
   echo "starting vim"
-  vim -p `find ~/Documents/ba/latex_thesis/my_thesis/ -type f -name "*tex" -not -name "*config*" -not -name "*appendix*" -or -name "*bib"` 
+  vim -p `find ~/Documents/uni/ba/latex_thesis/my_thesis/ -type f -name "*tex" -not -name "*config*" -not -name "*appendix*" -or -name "*bib"` 
 else
   echo "starting vscode"
-  code ~/Documents/ba/vsc_ws.code-workspace
+  code ~/Documents/uni/ba/vsc_ws.code-workspace
 fi
 
