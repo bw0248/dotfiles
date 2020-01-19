@@ -160,7 +160,8 @@ type = internal/network
 interface = enp0s31f6
 format-connected = <label-connected>
 format-connected-underline = #0a6cf5
-label-connected = %ifname% (%linkspeed%) |  %downspeed%  %upspeed% 
+#label-connected = %ifname% (%linkspeed%) |  %downspeed%  %upspeed%
+label-connected = %ifname% (%linkspeed%) |  %downspeed%  %upspeed% 
 format-disconnected =
 
 [module/wireless-network]
@@ -169,7 +170,8 @@ interface = wlp2s0
 
 format-connected = <label-connected>
 format-connected-underline = #0a6cf5
-label-connected =  %essid% (%signal%%) |  %downspeed%  %upspeed% 
+#label-connected =  %essid% (%signal%%) |  %downspeed%  %upspeed%
+label-connected =  %essid% (%signal%%) |  %downspeed%  %upspeed%  
 
 format-disconnected =
 ;format-disconnected = <label-disconnected>

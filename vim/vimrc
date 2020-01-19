@@ -10,6 +10,7 @@ Plug 'lervag/vimtex'
 "Plug 'vim-airline/vim-airline-themes'
 Plug 'itchyny/lightline.vim'
 Plug 'sheerun/vim-polyglot'
+Plug 'takac/vim-hardtime'
 call plug#end()
 
 syntax enable
@@ -27,6 +28,9 @@ set title			" change the terminal title
 set t_Co=256
 set incsearch                   " search on keystroke
 set hlsearch                    " highlight all hits
+
+" enable hardmode by default
+let g:hardtime_default_on = 1
 
 "############## Spellcheck ################
 " TODO: Create spellfile, so german words can be added to the german
@@ -47,6 +51,14 @@ set noshowmode
 let g:lightline = {
       \ 'colorscheme': 'wombat',
       \ }
+
+"############### Vimtex ###################
+
+let g:tex_flavor = "latex"
+"let g:vimtex_view_method = "Evince"
+let g:vimtex_latexmk_options ="-pdf -verbose -file-line-error -synctex=1 -interaction=nonstopmode"
+let g:vimtex_quickfix_ignore_all_warnings = 0
+let g:polyglot_disabled = ['latex']
 
 "############### Themes ###################
 
