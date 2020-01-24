@@ -152,3 +152,5 @@ export HISTCONTROL=ignoreboth:erasedups
 # set editors
 export EDITOR=vim
 export VISUAL=gedit
+
+# my aliases
