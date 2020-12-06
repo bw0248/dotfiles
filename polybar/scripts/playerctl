@@ -27,9 +27,10 @@ artist=$(playerctl --player=$player metadata artist 2>/dev/null)
 song=$(playerctl --player=$player metadata title 2>/dev/null) 
 
 out_string="$status  $artist - $song"
+#echo $out_string
 
 if [[ $running -eq 1 ]]; then
-  if [[ $artist == '' && $player == 'spotify' ]]; then
+  if [[ $song == 'Advertisement' && $player == 'spotify' ]]; then
       underline_color=#FF0000
       out_string="$status  blocking ad"
       pactl set-sink-mute @DEFAULT_SINK@ 1

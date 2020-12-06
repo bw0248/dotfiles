@@ -5,9 +5,9 @@
 # this file and re-run i3-config-wizard(1).
 #
 
-set $MAIN_MON HDMI2
+set $MAIN_MON DP1
 set $SEC_MON eDP1
-set $THIRD_MON eDP1
+set $THIRD_MON HDMI2
 
 ############### Aliases ###################
 
@@ -31,7 +31,7 @@ set $urgent-bg-color     #E53935
 ############### Autostart ##################
 
 # setup displays
-exec_always --no-startup-id xrandr --output $SEC_MON --mode 1920x1080 --output $MAIN_MON --mode 1920x1200 --primary --left-of $SEC_MON --output DP1 --off
+exec_always --no-startup-id xrandr
 
 # config for beamer
 # xrandr --output eDP-1 --mode 1920x1080 --primary --right-of DP-2 --output DP-2 --mode 1024x768
@@ -39,7 +39,8 @@ exec_always --no-startup-id xrandr --output $SEC_MON --mode 1920x1080 --output $
 ## Wallpaper
 #exec_always --no-startup-id feh --bg-scale ~/Pictures/wallpapers/earth.jpg
 #exec_always --no-startup-id feh --bg-scale ~/dotfiles/wallpapers/sea.jpg
-exec_always --no-startup-id feh --bg-scale ~/dotfiles/wallpapers/astrojelly.jpg
+exec_always --no-startup-id feh --bg-scale ~/dotfiles/wallpapers/forest.jpg
+#exec_always --no-startup-id feh --bg-scale ~/dotfiles/wallpapers/astrojelly.jpg
 
 exec --no-startup-id redshift-gtk
 
@@ -52,7 +53,7 @@ exec --no-startup-id redshift-gtk
 #exec --no-startup-id nm-applet
 
 #exec_always --no-startup-id compton --config ~/.config/compton.conf -f
-exec_always --no-startup-id compton -f
+#exec_always --no-startup-id compton -f
 
 #exec_always --no-startup-id start-pulseaudio-x11
 
@@ -66,7 +67,8 @@ set $mod Mod4
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
-font pango:noto-sans 8
+#font pango:noto-sans 8
+font pango:JetBrainsMono-Regular 8
 
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
@@ -102,7 +104,12 @@ bindsym $mod+p exec urxvt -e python3
 bindsym $mod+o exec urxvt -e octave-cli
 
 # start chrome
-bindsym $mod+c exec google-chrome-stable
+#bindsym $mod+c exec google-chrome-stable
+bindsym $mod+c exec firefox
+bindsym $mod+Shift+c exec firefox --private-window
+
+# toggle spotify
+bindsym $mod+s exec toggle_spotify
 
 # start thunderbird
 bindsym $mod+t exec thunderbird
@@ -114,15 +121,15 @@ bindsym $mod+Shift+q kill
 #bindsym $mod+Shift+d exec dmenu_run
 
 # rofi config in .config/rofi/config.rasi
-bindsym $mod+d exec rofi -show drun
+bindsym $mod+d exec rofi -show drun -dpi 160
 #bindsym $mod+d exec rofi -show run -lines 6 -eh 3 -width 100 -padding 400 -opacity "85" -bw 0 -bc "$bg-color" -bg "$bg-color" -fg "$text-color" -hlbg "$bg-color" -hlfg "#9575cd" -font "System San Francisco Display 12" 
 #bindsym $mod+d exec rofi -show run -fullscreen -lines 6 -eh 3 -padding 400 -opacity "85" -bw 0 -bc "$bg-color"  -bg "$bg-color" -fg "$text-color" -hlbg "$bg-color" -hlfg "#9575cd" -font "System San Francisco Display 12" 
 
 # change focus
-bindsym $mod+j focus left
-bindsym $mod+k focus down
-bindsym $mod+l focus up
-bindsym $mod+odiaeresis focus right
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
 
 # alternatively, you can use the cursor keys:
 bindsym $mod+Left focus left
@@ -131,10 +138,10 @@ bindsym $mod+Up focus up
 bindsym $mod+Right focus right
 
 # move focused window
-bindsym $mod+Shift+j move left
-bindsym $mod+Shift+k move down
-bindsym $mod+Shift+l move up
-bindsym $mod+Shift+odiaeresis move right
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
 
 # alternatively, you can use the cursor keys:
 bindsym $mod+Shift+Left move left
@@ -142,16 +149,18 @@ bindsym $mod+Shift+Down move down
 bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
 
+# toggle split to free up 'h' for vim like navigation
+bindsym $mod+v split toggle
 # split in horizontal orientation
-bindsym $mod+h split h
+#bindsym $mod+h split h
 # split in vertical orientation
-bindsym $mod+v split v
+#bindsym $mod+v split v
 
 # enter fullscreen mode for the focused container
 bindsym $mod+f fullscreen toggle
 
 # change container layout (stacked, tabbed, toggle split)
-bindsym $mod+s layout stacking
+#bindsym $mod+s layout stacking
 bindsym $mod+w layout tabbed
 bindsym $mod+e layout toggle split
 
@@ -197,6 +206,10 @@ bindsym Control+XF86AudioMute exec "mediaplayer_ctrl 2"
 bindsym Control+XF86AudioLowerVolume exec "mediaplayer_ctrl 1"
 bindsym Control+XF86AudioRaiseVolume exec "mediaplayer_ctrl 0" 
 
+bindsym XF86AudioNext exec "mediaplayer_ctrl 0"
+bindsym XF86AudioPrev exec "mediaplayer_ctrl 1"
+bindsym XF86AudioPlay exec "mediaplayer_ctrl 2"
+
 ################# Workspaces ###################
 
 # name workspaces
@@ -212,10 +225,10 @@ set $ws7 "7:"
 set $ws8 "8:"
 set $ws9 "9:"
 set $ws10 "10:"
-set $ws11 "11:"
-set $ws12 "12:"
-set $ws13 "13:"
-set $ws14 "14:"
+set $ws11 "11:"
+set $ws12 "12:"
+set $ws13 "13:"
+set $ws14 "14:"
 set $ws15 "15:"
 set $ws16 "16:"
 set $ws17 "17:"
@@ -291,6 +304,8 @@ for_window[class="polybar"] border pixel 1
 for_window[class="Zathura"] border pixel 1
 
 for_window[class="mpv"] border pixel 1, floating enable, resize set 1000px 800px, move position center
+
+for_window[class="Matplotlib"] border pixel 1, floating enable, resize set 1000px 800px, move position center
 
 # switch to workspace
 bindsym $mod+1 workspace $ws1

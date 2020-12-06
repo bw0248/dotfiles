@@ -1,1 +1,11 @@
 vim/_vim/plugged/
+gedit/gedit-metadata.xml
+vim/_vim/.netrwhist
+config/gtk-3.0/bookmarks
+bin/300_dpi
+bin/dpi
+bin/journal
+bin/kubectl
+bin/kubelogin
+bin/plot_res
+
