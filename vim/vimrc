@@ -4,6 +4,22 @@ set nocompatible
 
 " vim-plug plugin manager (install plugins with :PlugInstall)
 call plug#begin('~/.vim/plugged')
+
+" plugins used by ThePrimeagen (youtube)
+Plug 'git@github.com:Valloric/YouCompleteMe.git'    " auto-complete
+Plug 'morhetz/gruvbox'
+Plug 'jremmen/vim-ripgrep'  " fast grep
+Plug 'tpope/vim-fugitive'   " git integration
+Plug 'leafgarland/typescript-vim'  " typscript
+Plug 'vim-utils/vim-man'    " man pages
+Plug 'lyuts/vim-rtags'      " c++
+Plug 'git@github.com:kien/ctrlp.vim.git'    " file finding
+Plug 'mbbill/undotree'  " undo history visualizer/tool
+
+" debugging
+Plug 'puremourning/vimspector'
+
+Plug 'szw/vim-maximizer'
 "Plug 'KeitaNakamura/neodark.vim'
 Plug 'lervag/vimtex'
 "Plug 'vim-airline/vim-airline'
@@ -14,23 +30,60 @@ Plug 'takac/vim-hardtime'
 call plug#end()
 
 syntax enable
-filetype plugin indent on
-"set background=dark
+set noerrorbells
+set tabstop=4 softtabstop=4
+set shiftwidth=4		" number of spaces for autoindent
+set expandtab			" uses spaces instead of tabs
+set smartindent
 set number 			" show line numbers
 set relativenumber
-set autoindent			" auto indentation
-set softtabstop=4
-set expandtab			" uses spaces instead of tabs
-set smarttab			" use tabs at the start of a line, spaces elsewhere
-set shiftwidth=2		" number of spaces for autoindent
-set showmatch			" show matching parenthesis
-set title			" change the terminal title
-set t_Co=256
+set smartcase
 set incsearch                   " search on keystroke
-set hlsearch                    " highlight all hits
+set nowrap      " don't softbreak lines
+set cursorline
+highlight CursorLine ctermbg=129 cterm=bold "ctermfg=Gray
+set colorcolumn=80
+highlight ColorColumn ctermbg=8 guibg=lightgrey
+set showmatch			" show matching parenthesis
+set ignorecase
+filetype plugin indent on
+
+"set background=dark
+"set autoindent			" auto indentation
+"set smarttab			" use tabs at the start of a line, spaces elsewhere
+"set title			" change the terminal title
+"set t_Co=256
+"set hlsearch                    " highlight all hits
 
 " enable hardmode by default
-let g:hardtime_default_on = 1
+let g:hardtime_default_on = 0
+
+" Autocompletion
+"set wildmode=longest,list,full
+let g:ycm_autoclose_preview_window_after_completion = 1
+
+" Splitting
+set splitbelow
+set splitright
+
+"" Leader Key shortcuts
+let mapleader=" "
+
+" moving between windows (use '|' afterwards to allow comments in same line)
+nnoremap <leader>h :wincmd h<CR>|    " leader + h -> switch to left window
+nnoremap <leader>j :wincmd j<CR>|    " leader + j -> switch to bottom window
+nnoremap <leader>k :wincmd k<CR>|    " leader + k -> switch to upper window
+nnoremap <leader>l :wincmd l<CR>|    " leader + l -> switch to right window
+nnoremap <leader>f :MaximizerToggle<CR>| " make window fullscreen
+
+nnoremap <leader>u :UndotreeShow<CR>
+nnoremap <leader>pv :wincmd v<bar> :Ex <bar> :vertical resize 30<CR>
+nnoremap <leader>ps :Rg<SPACE>
+nnoremap <silent> <leader>+ :vertical resize +5<CR>
+nnoremap <silent> <leader>- :vertical resize -5<CR>
+
+nnoremap <silent> <leader>gd :YcmCompleter GoTo<CR>
+nnoremap <silent> <leader>gf :YcmCompleter FixIt<CR>
 
 "############## Spellcheck ################
 " TODO: Create spellfile, so german words can be added to the german
@@ -39,6 +92,7 @@ let g:hardtime_default_on = 1
 au BufNewFile,BufRead,BufEnter      *.wiki     setlocal spell      spelllang=en_us,de_de,en_gb
 au BufNewFile,BufRead,BufEnter      *.md       setlocal spell      spelllang=en_us,de_de,en_gb
 au BufNewFile,BufRead,BufEnter      *.txt      setlocal spell      spelllang=en_us,de_de,en_gb
+au BufNewFile,BufRead,BufEnter      *.tex      setlocal spell      spelllang=en_us,de_de,en_gb
 
 "############## Statusline ###############
 
@@ -52,6 +106,21 @@ let g:lightline = {
       \ 'colorscheme': 'wombat',
       \ }
 
+"############### Vimspector ##############
+"let g:vimspector_enable_mappings = 'HUMAN'
+nmap <leader><F9> :call vimspector#Launch()<CR>
+nnoremap <F2> :call vimspector#Reset()<CR>
+
+nmap <F7> <Plug>VimspectorStepInto
+nmap <F8> <Plug>VimspectorStepOver
+nmap <leader><F8> <Plug>VimspectorStepOut
+nnoremap <F9> :call vimspector#Continue()<CR>
+nmap <F5> <Plug>VimspectorRestart
+
+nmap <leader>bp <Plug>VimspectorToggleBreakpoint
+nmap <leader>cbp <Plug>VimspectorToggleConditionalBreakpoint
+
+":packadd! vimspector
 "############### Vimtex ###################
 
 let g:tex_flavor = "latex"
@@ -66,15 +135,15 @@ let g:polyglot_disabled = ['latex']
 "colorscheme Tomorrow-Night-Bright
 "
 """"""""""""" gruvbox """""""""""""""""""""""
-"set background=dark
+set background=dark
+colorscheme gruvbox
 ""let g:gruvbox_contrast_dark='hard'      "needs to be set before loading the colorscheme
-"colorscheme gruvbox
 "
 "let g:gruvbox_italic=1
 
 
 """"""""""""""" solarized """"""""""""""""
-set background=dark
+"set background=dark
 "let g:solarized_termcolors=256  " only use this if you don't use solarized
 "colors in Xresources
 "colorscheme solarized
@@ -84,27 +153,9 @@ set background=dark
 "let g:neodark#background = '#000000'
 "let g:neodark#use_256color = 1
 
-""""""""""""""" hybrid theme """""""""""""
-
-"default palette for hybrid theme
-"let g:hybrid_custom_term_colors = 1
-
-"colorscheme hybrid
-
-
-"reduce contrast palette for hybrid theme
-"let g:hybrid_reduced_contrast = 1 " Remove this line if using the default palette.
-
-
 """""""""""""" jellybeans """""""""""""""""
 
 "colorscheme jellybeans
-
-
-"############## Custom Mappings ##############
-
-" Don't use Ex mode, use Q for formatting
-map Q gq
 
 "############## Syntax Highlighting ##############
 
