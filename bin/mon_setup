@@ -7,7 +7,8 @@ echo $1
 # xrandr commands for i3 config
 i3_prefix='exec_always --no-startup-id xrandr'
 xrandr_lappy='--output $SEC_MON --mode 1920x1080'
-xrandr_main='--output $MAIN_MON --mode 1920x1200 --primary --left-of $SEC_MON'
+#xrandr_main='--output $MAIN_MON --mode 1920x1200 --primary --left-of $SEC_MON'
+xrandr_main='--output $MAIN_MON --mode 3840x2160 --primary --left-of $SEC_MON'
 xrandr_tv='--output $THIRD_MON --mode 1920x1080 --right-of $SEC_MON'
 
 # disable everything except for laptop display
@@ -23,13 +24,15 @@ conf_changed=false
 
 # get hdmi output
 #read conn_mon_2 <<< $(xrandr | grep '\Wconnected' | grep -v "eDP1" | awk '{print $1}')
-read conn_mon_2 <<< $(xrandr | grep '\Wconnected' | grep "HDMI" | awk '{print $1}')
+#read conn_mon_2 <<< $(xrandr | grep '\Wconnected' | grep "HDMI" | awk '{print $1}')
+#read conn_mon_3<< $(xrandr | grep '\Wconnected' | grep "HDMI" | awk '{print $1}')
 
 # get dp output
-read conn_mon_3 <<< $(xrandr | grep '\Wconnected' | grep "^DP" | awk '{print $1}')
+read conn_mon_2 <<< $(xrandr | grep '\Wconnected' | grep "^DP" | awk '{print $1}')
 
-#echo $conn_mon_1 
-#echo $conn_mon_2 
+echo $conn_mon_1 
+echo $conn_mon_2 
+echo $conn_mon_3
 
 main_mon=""
 sec_mon=""
@@ -37,10 +40,15 @@ third_mon=""
 
 if [ "$1" = "home" ]; then
   #echo $1
-  main_mon=$conn_mon_2
-  sec_mon=$conn_mon_1
-  third_mon=$conn_mon_1 # tv not connected so use laptop display instead
-  xrandr_cmd="${xrandr_cmd} ${xrandr_lappy} ${xrandr_main} ${xrandr_disable_tv}" 
+  #main_mon=$conn_mon_2
+  #sec_mon=$conn_mon_1
+  #third_mon=$conn_mon_1 # tv not connected so use laptop display instead
+  #xrandr_cmd="${xrandr_cmd} ${xrandr_lappy} ${xrandr_main} ${xrandr_disable_tv}" 
+
+  # workaround for combination of hidpi and tv/laptop
+  main_mon="DP1"
+  sec_mon="eDP1"
+  third_mon="eDP1"
   conf_changed=true
 elif [ "$1" = "pres" ]; then
   #echo $1
@@ -48,19 +56,26 @@ elif [ "$1" = "pres" ]; then
   sec_mon=$conn_mon_2
   conf_changed=true
 elif [ "$1" = "laptop" ]; then
-  #workaround as there is weird stuff happening
   xrandr --auto
   conf_changed=false
-  #main_mon=$conn_mon_1
-  #sec_mon=$conn_mon_1
-  #third_mon=$conn_mon_1
-  #xrandr_cmd="${xrandr_cmd} ${xrandr_lappy_only} ${xrandr_disable_main} ${xrandr_disable_tv}"
-  #conf_changed=true
 elif [ "$1" = "tv" ]; then
-  main_mon=$conn_mon_2
-  sec_mon=$conn_mon_1
-  third_mon=$conn_mon_3 
-  xrandr_cmd="${xrandr_cmd} ${xrandr_lappy} ${xrandr_main} ${xrandr_tv}" 
+  #main_mon=$conn_mon_2
+  #sec_mon=$conn_mon_1
+  #third_mon=$conn_mon_3 
+  #xrandr_cmd="${xrandr_cmd} ${xrandr_lappy} ${xrandr_main} ${xrandr_tv}" 
+
+  # workaround for combination of hidpi and tv/laptop
+  main_mon="DP1"
+  sec_mon="eDP1"
+  third_mon="HDMI2"
+  #xrandr_cmd="${xrandr_cmd} --output DP1 --auto --output eDP1 --auto --right-of DP1 --output HDMI2 --mode 1920x180 --pos 7680x0"
+  xrandr_cmd="${xrandr_cmd} --output DP1 --auto --primary --pos 3840x0 --output eDP1 --auto --pos 0x0 --scale 2x2 --output HDMI2 --auto --pos 7680x0 --scale 2x2"
+  conf_changed=true
+elif [ "$1" = "three" ]; then
+  main_mon="DP1"
+  sec_mon="eDP1"
+  third_mon="HDMI2"
+  xrandr_cmd="${xrandr_cmd} --output DP1 --auto --primary --pos 3840x0 --output eDP1 --auto --pos 0x0 --scale 2x2 --output HDMI2 --auto --scale2x1.8 --pos 7680x0"
   conf_changed=true
 fi
 

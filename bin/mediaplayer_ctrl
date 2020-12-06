@@ -1,41 +1,48 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+determine_running_player() {
+    # determine running player
+    spotify_status=$(playerctl --player=spotify status 2>/dev/null)
+    cmus_status=$(playerctl --player=cmus status 2>/dev/null)
+
+    if [[ -z $spotify_status && -z $cmus_status ]]; then
+        echo "no player running"
+        exit 0
+    elif [[ -z $spotify_status ]]; then
+        player='cmus'
+    else
+        player='spotify'
+    fi
+    echo $player
+}
+
 
 function next {
-  playerctl next
+    player=$(determine_running_player)
+    playerctl next
 }
 
 function prev {
-  playerctl previous
+    player=$(determine_running_player)
+    playerctl previous
 }
 
 function toggle_play {
-
-  # determine running player
-  spotify_status=$(playerctl --player=spotify status 2>/dev/null) 
-  cmus_status=$(playerctl --player=cmus status 2>/dev/null) 
-  if [[ -z $spotify_status && -z $cmus_status ]]; then
-    echo "no player running"
-    exit 0
-  elif [[ -z $spotify_status ]]; then
-    player='cmus'
-  else
-    player='spotify'
-  fi
-
-  playerctl --player=$player play-pause
+    player=$(determine_running_player)
+    playerctl --player=$player play-pause
 }
 
 case $1 in
-  0)
-    next
-    ;;
-  1)
-    prev
-    ;;
-  2)
-    toggle_play
-    ;;
-  *)
-    echo "option not recognized"
-    ;;
+    0)
+        next
+        ;;
+    1)
+        prev
+        ;;
+    2)
+        toggle_play
+        ;;
+    *)
+        echo "option not recognized"
+        ;;
 esac
