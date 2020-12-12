@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+
+CONFIG_PATH="~/.config/i3/config"
+
+# map workspace variables to workspace labels
+workspaces=$(grep '^set $ws' $CONFIG_PATH | cut -d '$' -f 2)
+declare -A WSMAP
+while read -r line
+do
+    k=$(echo $line | awk '{print $1}')
+    v=$(echo $line | awk '{print $2}')
+    WSMAP[$k]=$v
+done <<< $workspaces
+
+# map monitor variables to devices
+monitors=$(grep "^set \\$.*MON" $CONFIG_PATH | cut -d '$' -f 2)
+declare -A MONMAP
+while read -r line
+do
+    k=$(echo $line | awk '{print $1}')
+    v=$(echo $line | awk '{print $2}')
+    MONMAP[$k]=$v
+done <<< $monitors
+
+
+# map workspaces to monitors
+wsmon=$(
+    grep "^workspace \\$" $CONFIG_PATH \
+    | sed 's/workspace \$//' \
+    | sed 's/output//'
+)
+
+declare -A WSTOMON
+while read -r line
+do
+    k=$(echo $line | awk '{print $1}')
+    v=$(echo $line | awk '{print $2}' | sed 's/\$//')
+    WSTOMON[$k]=$v
+done <<< $wsmon
+
+for ws in "${!WSTOMON[@]}"
+do
+    mon=${WSTOMON[$ws]}
+    ws_label="${WSMAP[$ws]}"
+    mon_label="${MONMAP[$mon]}"
+    i3-msg -t run_command "workspace $ws_label; move workspace to $mon_label"
+done
+    
+
+
