@@ -1,6 +1,16 @@
 #!/usr/bin/env bash
 
-CONFIG_PATH="~/.config/i3/config"
+DEBUG=true
+
+CONFIG_PATH="/home/bw/.config/i3/config"
+
+if [[ ! -f $CONFIG_PATH ]]
+then
+    "echo config file at $CONFIG_PATH does not exist - exiting"
+    exit 1
+fi
+
+$DEBUG && echo "found config, starting script"
 
 # map workspace variables to workspace labels
 workspaces=$(grep '^set $ws' $CONFIG_PATH | cut -d '$' -f 2)
